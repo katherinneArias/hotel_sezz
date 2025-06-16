@@ -1,0 +1,66 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détail de la chambre{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1>Détail de la chambre</h1>
+
+        <table class="table">
+            <tbody>
+                <tr>
+                    <th>ID</th>
+                    <td>{{ chambre.id }}</td>
+                </tr>
+                <tr>
+                    <th>Numéro</th>
+                    <td>{{ chambre.numero }}</td>
+                </tr>
+                <tr>
+                    <th>Type</th>
+                    <td>{{ chambre.type }}</td>
+                </tr>
+                <tr>
+                    <th>Prix</th>
+                    <td>{{ chambre.prix }} €</td>
+                </tr>
+                <tr>
+                    <th>Statut</th>
+                    <td>{{ chambre.statut }}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <a href="{{ path('app_chambre_index') }}" class="btn btn-secondary">Retour à la liste</a>
+
+        {% if is_granted('ROLE_ADMIN') %}
+            <a href="{{ path('app_chambre_edit', {'id': chambre.id}) }}" class="btn btn-warning">Modifier</a>
+            {{ include('chambre/_delete_form.html.twig') }}
+        {% endif %}
+
+        <hr class="my-5">
+
+        <h2>Commentaires</h2>
+
+        {% for commentaire in chambre.commentaires %}
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">{{ commentaire.utilisateur.email }}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">{{ commentaire.dateCommentaire|date('d/m/Y H:i') }}</h6>
+                    <p class="card-text">{{ commentaire.contenu }}</p>
+                    {% if commentaire.note %}
+                        <span class="badge bg-info">Note : {{ commentaire.note }}/5</span>
+                    {% endif %}
+                </div>
+            </div>
+        {% else %}
+            <p>Aucun commentaire pour cette chambre.</p>
+        {% endfor %}
+
+        {% if is_granted('ROLE_CLIENT') %}
+            <hr class="my-4">
+            <h4>Ajouter un commentaire</h4>
+            {{ include('commentaire/form.html.twig', { form: commentaireForm, chambre: chambre }) }}
+        {% endif %}
+    </div>
+{% endblock %}

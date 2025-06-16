@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nos Chambres{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Nos chambres disponibles</h1>
+
+    <div class="row">
+        {% for chambre in chambres %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 shadow-sm">
+                    {% if chambre.photos|length > 0 %}
+                        <img src="{{ asset('uploads/photos/' ~ chambre.photos[0].url) }}" class="card-img-top" alt="Chambre photo">
+                    {% endif %}
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Chambre n°{{ chambre.numero }}</h5>
+                        <p class="card-text">
+                            <strong>Type :</strong> {{ chambre.type|capitalize }}<br>
+                            <strong>Prix :</strong> {{ chambre.prix }} €<br>
+                            <strong>Statut :</strong> {{ chambre.statut }}
+                        </p>
+                        <a href="{{ path('app_chambre_show', {'id': chambre.id}) }}" class="btn btn-outline-primary">Voir détails</a>
+
+                        {% if chambre.statut == 'libre' and is_granted('ROLE_CLIENT') %}
+    <a href="{{ path('app_reservation_new') }}" class="btn btn-success btn-sm mt-2">Réserver</a>
+{% endif %}
+
+                    </div>
+                    
+                </div>
+            </div>
+        {% else %}
+            <p class="text-muted text-center">Aucune chambre disponible pour le moment.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

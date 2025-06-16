@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Laisser un commentaire{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h2>Laisser un commentaire pour la chambre n°{{ chambre.numero }}</h2>
+
+        {{ form_start(form) }}
+
+        <div class="mb-3">
+            {{ form_label(form.contenu) }}
+            {{ form_widget(form.contenu) }}
+            {{ form_errors(form.contenu) }}
+        </div>
+
+        <div class="mb-3">
+            {{ form_label(form.note) }}
+            {{ form_widget(form.note) }}
+            {{ form_errors(form.note) }}
+        </div>
+
+        <button class="btn btn-primary">Envoyer</button>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

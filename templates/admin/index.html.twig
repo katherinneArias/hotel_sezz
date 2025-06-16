@@ -1,0 +1,75 @@
+{% extends 'admin/admin.html.twig' %}
+
+{% block title %}Tableau de bord Admin{% endblock %}
+
+{% block body %}
+<div class="mt-5">
+    <h1 class="mb-4">Bienvenue sur le tableau de bord administrateur</h1>
+
+    <div class="row">
+
+        <div class="col-md-4 mb-3">
+            <div class="card border-primary">
+                <div class="card-body">
+                    <h5 class="card-title">Chambres</h5>
+                    <p class="card-text">Ajouter, modifier ou supprimer les chambres.</p>
+                    <a href="{{ path('app_chambre_index') }}" class="btn btn-primary">Gérer</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="card border-success">
+                <div class="card-body">
+                    <h5 class="card-title">Utilisateurs</h5>
+                    <p class="card-text">Gérer les comptes clients et leurs accès.</p>
+                    <a href="{{ path('app_utilisateur_index') }}" class="btn btn-success">Gérer</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="card border-warning">
+                <div class="card-body">
+                    <h5 class="card-title">Réservations</h5>
+                    <p class="card-text">Consulter les réservations passées et à venir.</p>
+                    <a href="{{ path('app_reservation_index') }}" class="btn btn-warning">Gérer</a>
+
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="card border-info">
+                <div class="card-body">
+                    <h5 class="card-title">Commentaires</h5>
+                    <p class="card-text">Modérer et visualiser les avis des clients.</p>
+                    <a href="#" class="btn btn-info disabled">À venir</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="card border-dark">
+                <div class="card-body">
+                    <h5 class="card-title">Services</h5>
+                    <p class="card-text">Créer ou modifier les services proposés par l’hôtel.</p>
+                    <a href="#" class="btn btn-dark disabled">À venir</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="card border-secondary">
+                <div class="card-body">
+                    <h5 class="card-title">Photos</h5>
+                    <p class="card-text">Ajouter des images pour illustrer les chambres.</p>
+                    <a href="#" class="btn btn-secondary disabled">À venir</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

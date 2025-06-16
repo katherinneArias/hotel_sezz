@@ -1,0 +1,74 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouvelle réservation{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h1 class="mb-4 text-center">Créer une réservation</h1>
+
+    <div class="card p-4 shadow-sm">
+        {{ form_start(form) }}
+
+        <div class="mb-3">
+            {{ form_label(form.dateDebut) }}
+            {{ form_widget(form.dateDebut, {'attr': {'class': 'form-control', 'id': 'reservation_dateDebut'}}) }}
+        </div>
+
+        <div class="mb-3">
+            {{ form_label(form.dateFin) }}
+            {{ form_widget(form.dateFin, {'attr': {'class': 'form-control', 'id': 'reservation_dateFin'}}) }}
+        </div>
+
+        <div class="mb-3">
+            {{ form_label(form.chambre) }}
+            {{ form_widget(form.chambre, {'attr': {'class': 'form-select', 'id': 'reservation_chambre'}}) }}
+        </div>
+
+        <div class="mb-3">
+            {{ form_label(form.prixTotal) }}
+            {{ form_widget(form.prixTotal, {'attr': {'class': 'form-control', 'id': 'reservation_prixTotal', 'readonly': true}}) }}
+        </div>
+
+        <button class="btn btn-warning mt-2">Enregistrer</button>
+
+        {{ form_end(form) }}
+    </div>
+
+    <a href="{{ path('app_home') }}" class="btn btn-link mt-3">← Retour à l'accueil</a>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const dateDebut = document.getElementById('reservation_dateDebut');
+        const dateFin = document.getElementById('reservation_dateFin');
+        const chambreSelect = document.getElementById('reservation_chambre');
+        const prixTotalInput = document.getElementById('reservation_prixTotal');
+
+        function calculatePrix() {
+            const debut = new Date(dateDebut.value);
+            const fin = new Date(dateFin.value);
+            const jours = (fin - debut) / (1000 * 60 * 60 * 24);
+
+            if (jours > 0 && chambreSelect.value) {
+                const selectedOption = chambreSelect.selectedOptions[0];
+                const prixRegex = /\((\d+)\s?€/;
+                const match = selectedOption.textContent.match(prixRegex);
+
+                if (match) {
+                    const prixParJour = parseFloat(match[1]);
+                    prixTotalInput.value = (prixParJour * jours).toFixed(2);
+                }
+            } else {
+                prixTotalInput.value = '';
+            }
+        }
+
+        dateDebut.addEventListener('change', calculatePrix);
+        dateFin.addEventListener('change', calculatePrix);
+        chambreSelect.addEventListener('change', calculatePrix);
+    });
+</script>
+{% endblock %}

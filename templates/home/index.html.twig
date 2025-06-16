@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil - Hôtel Sezz{% endblock %}
+
+{% block body %}
+<div class="hero-section">
+    <h1>Bienvenue à l'Hôtel Sezz</h1>
+    <p>Votre confort est notre priorité.</p>
+
+    <div class="btn-group">
+        {% if app.user and is_granted('ROLE_CLIENT') %}
+            <a href="{{ path('app_chambre_index') }}" class="btn btn-primary">Voir les chambres</a>
+            <a href="{{ path('app_reservation_new') }}" class="btn btn-success">Faire une réservation</a>
+            <a href="{{ path('app_reservation_client') }}" class="btn btn-outline-light">Mes réservations</a>
+        {% elseif app.user and is_granted('ROLE_ADMIN') %}
+            <a href="{{ path('admin_dashboard') }}" class="btn btn-warning">Espace Admin</a>
+        {% else %}
+            <a href="{{ path('app_login') }}" class="btn btn-dark">Connexion</a>
+            <a href="{{ path('app_register') }}" class="btn btn-success">Inscription</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,85 @@
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails de la chambre{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h1 class="mb-4">Détails de la chambre</h1>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <table class="table table-bordered mb-0">
+                <tbody>
+                    <tr>
+                        <th scope="row">Numéro</th>
+                        <td>{{ chambre.numero }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Type</th>
+                        <td>{{ chambre.type }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Prix</th>
+                        <td>{{ chambre.prix }} €</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Statut</th>
+                        <td>{{ chambre.statut }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <a href="{{ path('app_home') }}" class="btn btn-outline-secondary mb-4">&larr; Retour à l'accueil</a>
+
+    {% if is_granted('ROLE_CLIENT') %}
+        <a href="{{ path('app_commentaire_new', {'id': chambre.id}) }}" class="btn btn-primary mb-4 ms-2">Ajouter un commentaire</a>
+    {% endif %}
+
+    <hr>
+    <h3 class="mt-4">Photos</h3>
+    {% if chambre.photos is not empty %}
+        <div class="row mb-4">
+            {% for photo in chambre.photos %}
+                <div class="col-md-4 mb-3">
+                    <img src="{{ asset('uploads/photos/' ~ photo.url) }}"
+                         class="img-fluid rounded shadow-sm border"
+                         alt="Photo chambre {{ chambre.numero }}">
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="text-muted">Aucune photo pour cette chambre.</p>
+    {% endif %}
+
+    <hr>
+    <h3 class="mt-4">Commentaires</h3>
+    {% if chambre.commentaires is not empty %}
+        {% for commentaire in chambre.commentaires %}
+            <div class="border rounded p-3 mb-3 bg-light">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <strong>{{ commentaire.utilisateur.nom }} {{ commentaire.utilisateur.prenom }}</strong>
+                        <small class="text-muted">le {{ commentaire.dateCommentaire|date('d/m/Y H:i') }}</small>
+                    </div>
+                    {% if commentaire.note %}
+                        <span class="badge bg-info text-dark">Note : {{ commentaire.note }}/5</span>
+                    {% endif %}
+                </div>
+                <p class="mt-2 mb-1">{{ commentaire.contenu }}</p>
+
+                {% if app.user and app.user == commentaire.utilisateur %}
+                    <div>
+                        <a href="{{ path('app_commentaire_edit', {'id': commentaire.id}) }}" class="btn btn-sm btn-outline-secondary">Modifier</a>
+                        {{ include('commentaire/_delete_form.html.twig', { commentaire: commentaire }) }}
+                    </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+    {% else %}
+        <p class="text-muted">Aucun commentaire pour cette chambre.</p>
+    {% endif %}
+</div>
+{% endblock %}

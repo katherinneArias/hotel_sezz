@@ -1,0 +1,55 @@
+{% extends 'admin/admin.html.twig' %}
+
+{% block title %}Réservations - Administration{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <h1 class="mb-4">Gestion des réservations</h1>
+
+    <table class="table table-hover table-bordered align-middle">
+        <thead class="table-dark text-center">
+            <tr>
+                <th>ID</th>
+                <th>Client</th>
+                <th>Chambre</th>
+                <th>Date d’arrivée</th>
+                <th>Date de départ</th>
+                <th>Prix total</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for reservation in reservations %}
+            <tr class="text-center">
+                <td>{{ reservation.id }}</td>
+                <td>{{ reservation.utilisateur.nom }} {{ reservation.utilisateur.prenom }}</td>
+                <td>Chambre n°{{ reservation.chambre.numero }}</td>
+                <td>{{ reservation.dateDebut|date('d/m/Y') }}</td>
+                <td>{{ reservation.dateFin|date('d/m/Y') }}</td>
+                <td>{{ reservation.prixTotal }} €</td>
+                <td>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <a href="{{ path('app_reservation_show', {'id': reservation.id}) }}" class="btn btn-sm btn-outline-info mb-1">Voir</a>
+                        <a href="{{ path('app_reservation_edit', {'id': reservation.id}) }}" class="btn btn-sm btn-outline-warning mb-1">Modifier</a>
+
+                        <form method="post"
+                              action="{{ path('app_reservation_delete', {'id': reservation.id}) }}"
+                              onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette réservation ?');"
+                              style="display:inline;">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ reservation.id) }}">
+                            <button class="btn btn-sm btn-outline-danger">Supprimer</button>
+                        </form>
+                    {% elseif app.user == reservation.utilisateur %}
+                        <a href="{{ path('app_reservation_client') }}" class="btn btn-sm btn-outline-info mb-1">Voir</a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7" class="text-center text-muted">Aucune réservation trouvée.</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

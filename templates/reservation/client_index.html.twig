@@ -1,0 +1,44 @@
+{# templates/reservation/client_index.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes réservations{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Mes réservations</h1>
+
+    {% if reservations is empty %}
+        <div class="alert alert-info text-center">
+            Vous n'avez pas encore effectué de réservations.
+        </div>
+    {% else %}
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped text-center align-middle shadow-sm">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Chambre</th>
+                        <th>Type</th>
+                        <th>Dates</th>
+                        <th>Prix total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for reservation in reservations %}
+                        <tr>
+                            <td>Chambre n°{{ reservation.chambre.numero }}</td>
+                            <td>{{ reservation.chambre.type|capitalize }}</td>
+                            <td>
+                                <span class="badge bg-light text-dark">
+                                    du {{ reservation.dateDebut|date('d/m/Y') }}<br>
+                                    au {{ reservation.dateFin|date('d/m/Y') }}
+                                </span>
+                            </td>
+                            <td><strong>{{ reservation.prixTotal }} €</strong></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,74 @@
+{% extends 'admin/admin.html.twig' %}
+
+{% block title %}Liste des Chambres{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <h1 class="mb-4">Gestion des chambres</h1>
+
+    {% if is_granted('ROLE_ADMIN') %}
+    <a href="{{ path('app_chambre_new') }}" class="btn btn-success mb-3">Créer une chambre</a>
+{% endif %}
+
+
+    <table class="table table-bordered table-hover text-center align-middle">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Numéro</th>
+                <th>Type</th>
+                <th>Prix (€)</th>
+                <th>Statut</th>
+                <th>Photos</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for chambre in chambres %}
+            <tr>
+                <td>{{ chambre.id }}</td>
+                <td>{{ chambre.numero }}</td>
+                <td>{{ chambre.type|capitalize }}</td>
+                <td>{{ chambre.prix }}</td>
+                <td>
+                    {% if chambre.statut == 'libre' %}
+                        <span class="badge bg-success">Libre</span>
+                    {% elseif chambre.statut == 'occupée' %}
+                        <span class="badge bg-warning text-dark">Occupée</span>
+                    {% else %}
+                        <span class="badge bg-secondary">Nettoyage</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if chambre.photos|length > 0 %}
+                        <div class="d-flex flex-wrap justify-content-center">
+                            {% for photo in chambre.photos %}
+                                <img src="{{ asset('uploads/photos/' ~ photo.url) }}"
+                                     alt="photo"
+                                     class="img-thumbnail me-1 mb-1"
+                                     width="100" height="100">
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <span class="text-muted">Aucune</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="{{ path('app_chambre_show', {'id': chambre.id}) }}" class="btn btn-sm btn-info mb-1">Voir</a>
+                    <a href="{{ path('app_chambre_edit', {'id': chambre.id}) }}" class="btn btn-sm btn-warning mb-1">Modifier</a>
+
+                    <form method="post" action="{{ path('app_chambre_delete', {'id': chambre.id}) }}" onsubmit="return confirm('Voulez-vous vraiment supprimer cette chambre ?');" style="display:inline-block;">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ chambre.id) }}">
+    <button class="btn btn-sm btn-danger">Supprimer</button>
+</form>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">Aucune chambre enregistrée.</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,35 @@
+{{ form_start(form) }}
+
+<div class="mb-3">
+    {{ form_label(form.dateDebut) }}
+    {{ form_widget(form.dateDebut, {'attr': {'class': 'form-control', 'id': 'dateDebut'}}) }}
+</div>
+
+<div class="mb-3">
+    {{ form_label(form.dateFin) }}
+    {{ form_widget(form.dateFin, {'attr': {'class': 'form-control', 'id': 'dateFin'}}) }}
+</div>
+
+<div class="mb-3">
+    {{ form_label(form.chambre) }}
+    {{ form_widget(form.chambre, {
+        'attr': {
+            'class': 'form-select chambre-select'
+        }
+    }) }}
+</div>
+
+<div class="mb-3">
+    {{ form_label(form.prixTotal) }}
+    {{ form_widget(form.prixTotal, {
+        'attr': {
+            'class': 'form-control',
+            'id': 'prixTotal',
+            'readonly': true
+        }
+    }) }}
+</div>
+
+<button class="btn btn-warning mt-3">Enregistrer</button>
+
+{{ form_end(form) }}
