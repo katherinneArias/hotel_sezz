@@ -29,12 +29,6 @@ class RegistrationController extends AbstractController
             $hashedPassword = $passwordHasher->hashPassword($user, $plainPassword);
             $user->setPassword($hashedPassword);
 
-            // Si tu veux laisser le rôle choisi via le formulaire :
-            // ne touche pas à $user->getRoles()
-
-            // Sinon, force en ROLE_CLIENT :
-            // $user->setRoles(['ROLE_CLIENT']);
-
             $em->persist($user);
             $em->flush();
 

@@ -121,7 +121,7 @@ public function setTelephone(?string $telephone): static
 
     public function eraseCredentials(): void
     {
-        // efface les données sensibles temporaires si besoin
+    
     }
 
     public function getNom(): ?string
@@ -146,7 +146,6 @@ public function setTelephone(?string $telephone): static
         return $this;
     }
 
-    // === Relations ===
 
     /** @return Collection<int, Reservation> */
     public function getReservations(): Collection

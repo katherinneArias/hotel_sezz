@@ -26,7 +26,7 @@ class ChambreController extends AbstractController
             ]);
         }
 
-        // Vista pública para clientes o anónimos
+        // Vue publique
         return $this->render('chambre/public_index.html.twig', [
             'chambres' => $chambreRepository->findAll(),
         ]);
@@ -68,7 +68,6 @@ class ChambreController extends AbstractController
                     $photo = new Photo();
                     $photo->setUrl($filename);
                     $photo->setChambre($chambre);
-
                     $entityManager->persist($photo);
                 }
             }
@@ -94,6 +93,23 @@ class ChambreController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $photoFiles = $form->get('photos')->getData();
+
+            foreach ($photoFiles as $photoFile) {
+                if ($photoFile instanceof UploadedFile) {
+                    $filename = uniqid() . '.' . $photoFile->guessExtension();
+                    $photoFile->move(
+                        $this->getParameter('photos_directory'),
+                        $filename
+                    );
+
+                    $photo = new Photo();
+                    $photo->setUrl($filename);
+                    $photo->setChambre($chambre);
+                    $entityManager->persist($photo);
+                }
+            }
+
             $entityManager->flush();
             $this->addFlash('success', 'Chambre mise à jour.');
             return $this->redirectToRoute('app_chambre_index');

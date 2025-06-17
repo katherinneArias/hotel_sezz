@@ -7,12 +7,12 @@
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    {% block stylesheets %}
-        <link rel="stylesheet" href="{{ asset('style.css') }}">
-    {% endblock %}
+    <link rel="stylesheet" href="{{ asset('style.css') }}">
 </head>
-<body>
+
+<body class="{% block body_class %}inner-page{% endblock %}">
+<div class="d-flex flex-column min-vh-100"> <!-- Wrapper -->
+
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
             <a class="navbar-brand" href="{{ path('app_home') }}">Hôtel Sezz</a>
@@ -22,14 +22,12 @@
 
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    {% if not (app.user and is_granted('ROLE_ADMIN') and app.request.attributes.get('_route') == 'app_home') %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ path('app_chambre_index') }}">Chambres</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ path('app_contact') }}">Contact</a>
-                        </li>
-                    {% endif %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('app_chambre_index') }}">Chambres</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('app_contact') }}">Contact</a>
+                    </li>
 
                     {% if is_granted('ROLE_CLIENT') %}
                         <li class="nav-item">
@@ -43,43 +41,48 @@
                         </li>
                     {% endif %}
                 </ul>
+            </div>
 
-                <ul class="navbar-nav ms-auto">
-                    {% if app.user %}
-                        <li class="nav-item text-white mt-2 me-2">
-                            Connecté : {{ app.user.userIdentifier }}
-                        </li>
-                        <li class="nav-item">
-                            <a class="btn btn-sm btn-danger" href="{{ path('app_logout') }}">Déconnexion</a>
-                        </li>
-                    {% else %}
-                        <li class="nav-item">
-                            <a class="btn btn-sm btn-outline-light me-2" href="{{ path('app_login') }}">Connexion</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="btn btn-sm btn-outline-success" href="{{ path('app_register') }}">Inscription</a>
-                        </li>
-                    {% endif %}
-                </ul>
+            <div class="d-flex">
+                {% if app.user %}
+                    <span class="text-white me-2 mt-2">Connecté : {{ app.user.userIdentifier }}</span>
+                    <a class="btn btn-sm btn-danger" href="{{ path('app_logout') }}">Déconnexion</a>
+                {% else %}
+                    <a class="btn btn-sm btn-outline-light me-2" href="{{ path('app_login') }}">Connexion</a>
+                    <a class="btn btn-sm btn-outline-success" href="{{ path('app_register') }}">Inscription</a>
+                {% endif %}
             </div>
         </div>
     </nav>
 
-    <div class="container mt-4">
-        {% for label, messages in app.flashes %}
-            {% for message in messages %}
-                <div class="alert alert-{{ label == 'success' ? 'success' : 'danger' }} alert-dismissible fade show" role="alert">
-                    {{ message }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
+    <main class="flex-fill">
+        <div class="container mt-4">
+            {% for label, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ label == 'success' ? 'success' : 'danger' }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
             {% endfor %}
-        {% endfor %}
 
-        {% block body %}{% endblock %}
-    </div>
+            {% block body %}{% endblock %}
+        </div>
+    </main>
 
-    {% block javascripts %}
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    {% endblock %}
+    <footer class="footer bg-dark text-white py-3 mt-auto">
+        <div class="container text-center">
+            <p class="mb-1">© 2025 Katherinne Arias B2 Projet Hôtel Sezz. Tous droits réservés.</p>
+            <p class="mb-0">123 Rue de la Plage, Saint-Tropez —
+                <a href="mailto:contact@hotelsezz.com" class="text-white">contact@hotelsezz.com</a> — +33 1 23 45 67 89
+            </p>
+        </div>
+    </footer>
+
+</div> <!-- END wrapper -->
+
+{% block javascripts %}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+{% endblock %}
 </body>
 </html>

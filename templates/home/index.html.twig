@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Accueil - Hôtel Sezz{% endblock %}
+{% block body_class %}home-page{% endblock %}
 
 {% block body %}
 <div class="hero-section">
@@ -20,4 +20,14 @@
         {% endif %}
     </div>
 </div>
+
+<div class="presentation-block container mt-5 mb-5 p-4 text-center rounded shadow">
+    <h2 class="mb-3">À propos de notre hôtel</h2>
+    <p class="lead">
+        L’Hôtel Sezz vous accueille au cœur de Saint-Tropez avec une élégance raffinée. Nos chambres modernes,
+        notre service personnalisé et notre ambiance chaleureuse font de chaque séjour une expérience unique.
+        Que ce soit pour des vacances reposantes ou un voyage d’affaires, notre établissement est conçu pour votre confort.
+    </p>
+</div>
 {% endblock %}
+

@@ -96,4 +96,14 @@ class CommentaireController extends AbstractController
             'commentaires' => $commentaireRepository->findAll(),
         ]);
     }
+
+#[Route('/', name: 'app_commentaire_index', methods: ['GET'])]
+#[IsGranted('ROLE_ADMIN')]
+public function index(CommentaireRepository $commentaireRepository): Response
+{
+    return $this->render('commentaire/index.html.twig', [
+        'commentaires' => $commentaireRepository->findAll(),
+    ]);
+}
+
 }
